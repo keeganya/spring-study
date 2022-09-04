@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--开启注解的支持-->
+    <context:annotation-config/>
+
+    <bean id="cat" class="cn.keegan.pojo.Cat"/><!--autowire="byType"时，id="cat"可以不写-->
+    <bean id="dog1" class="cn.keegan.pojo.Dog"/><!--autowire="byType"时，id="dog"可以不写-->
+    <bean id="dog2" class="cn.keegan.pojo.Dog"/>
+    <!--<bean id="dog1" class="cn.keegan.pojo.Dog"/> 当有两个相同的Dog类型时，autowire="byType"会报错-->
+
+    <!-- Bean注入
+        <bean id="people" class="cn.keegan.pojo.People">
+            <property name="name" value="胡国庆"/>
+            <property name="cat" ref="cat"/>
+            <property name="dog" ref="dog"/>
+        </bean>
+    -->
+
+    <!--
+        byname : 会自动在容器上下文中查找，和自己对象set方法后面的值（setDog、setCat）对应的beanid ！
+        byType : 会自动在容器上下文中查找，和自己对象属性类型相同的bean ！
+    -->
+    <!--<bean id="people" class="cn.keegan.pojo.People" autowire="byType">
+        <property name="name" value="胡国庆"/>
+    </bean>-->
+    <bean id="people" class="cn.keegan.pojo.People"/>
+
+    <!--***************************************总结*******************************************-->
+    <!--
+        byName时，需要保证所有的bean的id唯一，并且这个bean需要和自动注入的属性的set方法的值一致 ！
+        byType时，需要保证所有的bean的class唯一，并且这个bean需要和自动注入的属性的类型一致 ！
+    -->
+</beans>
+
+<!--@Autowired：自动装配通过类型，名字
+    如果@Autowired不能唯一自动装配上属性，则需要通过@Qualifier(value = "***")
+
+    @Resource：自动装配名字，类型
+
+    @Resource和@ Autowired的区别:
+    ·都是用来自动装配的，都可以放在属性字段上
+    .@Autowired通过byType的方式实现，而且必须要求这个对象存在!【常用】
+    .@Resource默认通过byname的方式实现，如果找不到名字，则通过byType实现! 如果两个都找不到的情况下，就报错!【常用】
+    ·执行顺序不同: @Autowired通过byType的方式实现。@Resource默认通过byname的方式实现。
+
+-->
